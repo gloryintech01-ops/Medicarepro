@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediCare Pro — Advanced Healthcare Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-deep: #0A2463;
+    --blue-mid: #1565C0;
+    --blue-bright: #1E88E5;
+    --blue-light: #42A5F5;
+    --blue-pale: #BBDEFB;
+    --blue-frost: #E3F2FD;
+    --white: #FFFFFF;
+    --off-white: #F8FBFF;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-400: #94A3B8;
+    --gray-600: #475569;
+    --gray-800: #1E293B;
+    --success: #16A34A;
+    --danger: #DC2626;
+    --shadow-sm: 0 2px 8px rgba(21,101,192,0.08);
+    --shadow-md: 0 8px 24px rgba(21,101,192,0.14);
+    --shadow-lg: 0 20px 60px rgba(10,36,99,0.18);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--gray-800);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--blue-pale);
+    padding: 0 2rem;
+    height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--blue-deep);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--blue-bright); }
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1.2rem;
+  }
+  .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--gray-600);
+    font-weight: 500; font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--blue-bright); }
+  .nav-actions { display: flex; gap: 0.75rem; }
+  .btn {
+    padding: 0.55rem 1.4rem; border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.25s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-outline {
+    background: transparent;
+    border: 2px solid var(--blue-bright);
+    color: var(--blue-bright);
+  }
+  .btn-outline:hover { background: var(--blue-frost); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+    color: white;
+    box-shadow: 0 4px 14px rgba(30,136,229,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(30,136,229,0.45); }
+  .btn-lg { padding: 0.85rem 2rem; font-size: 1rem; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-success { background: var(--success); color: white; }
+  .btn-ghost { background: var(--blue-frost); color: var(--blue-mid); border: none; }
+  .btn-ghost:hover { background: var(--blue-pale); }
+
+  /* ─── VIEWS / PAGES ─── */
+  .view { display: none; animation: fadeIn 0.35s ease; }
+  .view.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+  /* ─── HERO ─── */
+  #view-home {
+    padding-top: 72px;
+  }
+  .hero {
+    min-height: calc(100vh - 72px);
+    background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 55%, var(--blue-bright) 100%);
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 4rem 2rem;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-blob {
+    position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15;
+  }
+  .blob1 { width: 500px; height: 500px; background: #fff; top: -150px; right: -100px; }
+  .blob2 { width: 300px; height: 300px; background: var(--blue-light); bottom: -100px; left: 20%; }
+  .hero-content {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    align-items: center; position: relative; z-index: 1;
+    width: 100%;
+  }
+  .hero-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    color: white; line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+  .hero-text h1 em { font-style: normal; color: var(--blue-pale); }
+  .hero-text p { color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; }
+  .hero-stats { display: flex; gap: 2rem; margin-top: 2.5rem; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: white; }
+  .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+  .hero-card {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 24px;
+    padding: 2.5rem;
+    color: white;
+  }
+  .hero-card h3 { font-size: 1.3rem; margin-bottom: 1.5rem; font-family: 'Playfair Display', serif; }
+  .quick-features { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .qf-item {
+    background: rgba(255,255,255,0.1);
+    border-radius: 14px; padding: 1.25rem;
+    text-align: center; cursor: pointer;
+    transition: all 0.25s;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .qf-item:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+  .qf-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .qf-label { font-size: 0.85rem; font-weight: 500; }
+
+  /* ─── SECTIONS ─── */
+  .section { padding: 5rem 2rem; }
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; color: var(--blue-deep); margin-bottom: 0.75rem;
+  }
+  .section-header p { color: var(--gray-600); font-size: 1.05rem; }
+  .section-badge {
+    display: inline-block;
+    background: var(--blue-frost); color: var(--blue-mid);
+    font-size: 0.78rem; font-weight: 600;
+    padding: 4px 14px; border-radius: 50px;
+    margin-bottom: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* ─── DOCTORS SECTION ─── */
+  .doctors-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .doctor-card {
+    background: white; border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow-sm);
+    transition: all 0.3s; border: 1px solid var(--gray-200);
+  }
+  .doctor-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .doctor-avatar {
+    height: 180px;
+    background: linear-gradient(135deg, var(--blue-frost), var(--blue-pale));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; position: relative;
+  }
+  .doctor-badge {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--success); color: white;
+    font-size: 0.72rem; font-weight: 600;
+    padding: 3px 10px; border-radius: 50px;
+  }
+  .doctor-info { padding: 1.25rem; }
+  .doctor-name { font-weight: 700; font-size: 1.05rem; color: var(--blue-deep); }
+  .doctor-spec { color: var(--blue-bright); font-size: 0.85rem; font-weight: 500; margin: 2px 0 8px; }
+  .doctor-meta { display: flex; gap: 1rem; font-size: 0.8rem; color: var(--gray-400); margin-bottom: 1rem; }
+  .doctor-rating { color: #F59E0B; font-weight: 600; font-size: 0.85rem; }
+  .doctor-actions { display: flex; gap: 0.5rem; }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 2000;
+    background: rgba(10,36,99,0.5); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white; border-radius: 24px;
+    width: 100%; max-width: 560px;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes modalIn { from { opacity:0; transform:scale(0.92); } to { opacity:1; transform:none; } }
+  .modal-header {
+    padding: 1.75rem 2rem 1.25rem;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-header h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--blue-deep); }
+  .modal-close {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--gray-100); border: none; cursor: pointer;
+    font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; color: var(--gray-600);
+  }
+  .modal-close:hover { background: var(--gray-200); }
+  .modal-body { padding: 2rem; }
+
+  /* ─── FORMS ─── */
+  .form-group { margin-bottom: 1.25rem; }
+  .form-label {
+    display: block; font-size: 0.85rem; font-weight: 600;
+    color: var(--gray-600); margin-bottom: 0.4rem;
+  }
+  .form-control {
+    width: 100%; padding: 0.75rem 1rem;
+    border: 2px solid var(--gray-200); border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    color: var(--gray-800); background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-control:focus { border-color: var(--blue-bright); box-shadow: 0 0 0 3px rgba(30,136,229,0.12); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-hint { font-size: 0.78rem; color: var(--gray-400); margin-top: 4px; }
+  select.form-control { appearance: none; cursor: pointer; }
+
+  /* ─── DASHBOARD ─── */
+  #view-dashboard { padding-top: 72px; }
+  .dashboard-layout {
+    display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 72px);
+  }
+  .sidebar {
+    background: linear-gradient(180deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+    padding: 2rem 1.25rem;
+    position: sticky; top: 72px; height: calc(100vh - 72px);
+    overflow-y: auto;
+  }
+  .sidebar-user {
+    text-align: center; margin-bottom: 2rem;
+    padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    font-size: 2rem; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 0.75rem;
+    border: 3px solid rgba(255,255,255,0.25);
+  }
+  .sidebar-name { color: white; font-weight: 700; font-size: 1rem; }
+  .sidebar-email { color: rgba(255,255,255,0.6); font-size: 0.78rem; margin-top: 2px; }
+  .sidebar-nav { list-style: none; }
+  .sidebar-nav li { margin-bottom: 4px; }
+  .sidebar-nav a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.7rem 1rem; border-radius: var(--radius-sm);
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    font-size: 0.9rem; font-weight: 500; transition: all 0.2s;
+  }
+  .sidebar-nav a:hover, .sidebar-nav a.active {
+    background: rgba(255,255,255,0.15); color: white;
+  }
+  .sidebar-nav .nav-icon { font-size: 1.1rem; width: 20px; text-align: center; }
+  .main-content { padding: 2.5rem; background: var(--off-white); }
+  .dash-section { display: none; }
+  .dash-section.active { display: block; animation: fadeIn 0.3s ease; }
+  .dash-header { margin-bottom: 2rem; }
+  .dash-header h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--blue-deep); }
+  .dash-header p { color: var(--gray-600); margin-top: 4px; }
+  .dash-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+  .dash-card {
+    background: white; border-radius: var(--radius); padding: 1.5rem;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .dash-card-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 0.25rem;
+  }
+  .icon-blue { background: var(--blue-frost); }
+  .dash-card-value { font-size: 2rem; font-weight: 700; font-family: 'Playfair Display', serif; color: var(--blue-deep); }
+  .dash-card-label { font-size: 0.82rem; color: var(--gray-400); font-weight: 500; }
+  .panel {
+    background: white; border-radius: var(--radius);
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200);
+    overflow: hidden; margin-bottom: 1.5rem;
+  }
+  .panel-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel-header h3 { font-weight: 700; font-size: 1rem; color: var(--blue-deep); }
+  .panel-body { padding: 1.5rem; }
+
+  /* ─── TABLE ─── */
+  .table { width: 100%; border-collapse: collapse; }
+  .table th {
+    text-align: left; padding: 0.75rem 1rem;
+    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--gray-400); font-weight: 600; background: var(--gray-100);
+  }
+  .table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--gray-200); font-size: 0.88rem; }
+  .table tr:last-child td { border-bottom: none; }
+  .table tr:hover td { background: var(--blue-frost); }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 600;
+  }
+  .badge-green { background: #DCFCE7; color: #16A34A; }
+  .badge-blue { background: var(--blue-frost); color: var(--blue-mid); }
+  .badge-orange { background: #FEF3C7; color: #D97706; }
+  .badge-red { background: #FEE2E2; color: var(--danger); }
+
+  /* ─── APPOINTMENT BOOKING ─── */
+  .time-slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.5rem; }
+  .time-slot {
+    padding: 0.55rem; border: 2px solid var(--gray-200);
+    border-radius: 8px; text-align: center; cursor: pointer;
+    font-size: 0.82rem; font-weight: 500; transition: all 0.2s;
+    background: white;
+  }
+  .time-slot:hover { border-color: var(--blue-bright); color: var(--blue-bright); }
+  .time-slot.selected { background: var(--blue-bright); color: white; border-color: var(--blue-bright); }
+  .time-slot.taken { background: var(--gray-100); color: var(--gray-400); cursor: not-allowed; border-color: var(--gray-200); }
+
+  /* ─── PAYMENT ─── */
+  .payment-methods { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; margin-bottom: 1.5rem; }
+  .pay-method {
+    border: 2px solid var(--gray-200); border-radius: var(--radius-sm);
+    padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s;
+  }
+  .pay-method:hover { border-color: var(--blue-bright); }
+  .pay-method.selected { border-color: var(--blue-bright); background: var(--blue-frost); }
+  .pay-method-icon { font-size: 1.8rem; margin-bottom: 0.3rem; }
+  .pay-method-name { font-size: 0.8rem; font-weight: 600; color: var(--gray-600); }
+  .payment-summary {
+    background: var(--blue-frost); border-radius: var(--radius-sm);
+    padding: 1.25rem; margin-bottom: 1.5rem;
+  }
+  .pay-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
+  .pay-row.total { font-weight: 700; font-size: 1.05rem; color: var(--blue-deep); border-top: 1px solid var(--blue-pale); padding-top: 0.5rem; margin-top: 0.5rem; }
+
+  /* ─── UPLOAD ─── */
+  .upload-zone {
+    border: 2px dashed var(--blue-pale); border-radius: var(--radius);
+    padding: 3rem 2rem; text-align: center; cursor: pointer;
+    transition: all 0.25s; background: var(--blue-frost);
+  }
+  .upload-zone:hover { border-color: var(--blue-bright); background: rgba(30,136,229,0.06); }
+  .upload-zone.drag-over { border-color: var(--blue-bright); background: rgba(30,136,229,0.1); }
+  .upload-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .upload-text { color: var(--gray-600); }
+  .upload-text strong { color: var(--blue-bright); }
+  .uploaded-files { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .file-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    background: white; border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem; box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+  }
+  .file-icon { font-size: 1.5rem; }
+  .file-name { flex: 1; font-size: 0.88rem; font-weight: 500; }
+  .file-size { font-size: 0.78rem; color: var(--gray-400); }
+  .file-remove { background: none; border: none; cursor: pointer; color: var(--gray-400); font-size: 1rem; padding: 4px; border-radius: 4px; }
+  .file-remove:hover { color: var(--danger); background: #FEE2E2; }
+  .progress-bar-wrap { height: 4px; background: var(--gray-200); border-radius: 2px; overflow: hidden; margin-top: 4px; }
+  .progress-bar { height: 100%; background: var(--blue-bright); border-radius: 2px; transition: width 0.4s ease; }
+
+  /* ─── PRESCRIPTION ─── */
+  .rx-card {
+    background: white; border-radius: var(--radius);
+    border: 1px solid var(--gray-200); overflow: hidden;
+    box-shadow: var(--shadow-sm); margin-bottom: 1rem;
+  }
+  .rx-header {
+    background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+    padding: 1.5rem 2rem; color: white;
+    display: flex; justify-content: space-between; align-items: start;
+  }
+  .rx-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; }
+  .rx-logo span { color: var(--blue-pale); }
+  .rx-date { font-size: 0.82rem; opacity: 0.8; margin-top: 2px; }
+  .rx-id { font-size: 0.8rem; background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 50px; }
+  .rx-body { padding: 2rem; }
+  .rx-section { margin-bottom: 1.5rem; }
+  .rx-section h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-400); font-weight: 600; margin-bottom: 0.75rem; }
+  .rx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .rx-field strong { font-size: 0.85rem; color: var(--gray-800); }
+  .rx-field span { font-size: 0.78rem; color: var(--gray-400); display: block; margin-top: 2px; }
+  .rx-med {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.85rem 1rem; background: var(--blue-frost);
+    border-radius: var(--radius-sm); margin-bottom: 0.5rem;
+  }
+  .rx-med-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--blue-bright); color: white;
+    font-size: 0.8rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .rx-med-name { font-weight: 600; font-size: 0.9rem; }
+  .rx-med-dose { font-size: 0.8rem; color: var(--gray-400); }
+
+  /* ─── TOAST ─── */
+  .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+  .toast {
+    background: var(--blue-deep); color: white;
+    padding: 1rem 1.5rem; border-radius: var(--radius-sm);
+    font-size: 0.88rem; font-weight: 500;
+    box-shadow: var(--shadow-lg); max-width: 320px;
+    display: flex; align-items: center; gap: 0.75rem;
+    animation: slideIn 0.3s ease;
+  }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--danger); }
+  @keyframes slideIn { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:none; } }
+
+  /* ─── AUTH PAGES ─── */
+  #view-login, #view-signup {
+    padding-top: 72px; min-height: 100vh;
+    background: linear-gradient(135deg, var(--blue-frost) 0%, white 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 5rem 1rem 2rem;
+  }
+  .auth-card {
+    background: white; border-radius: 24px;
+    padding: 3rem; width: 100%; max-width: 480px;
+    box-shadow: var(--shadow-lg); border: 1px solid var(--gray-200);
+  }
+  .auth-logo { text-align: center; margin-bottom: 2rem; }
+  .auth-logo h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--blue-deep); }
+  .auth-logo p { color: var(--gray-400); font-size: 0.9rem; margin-top: 4px; }
+  .divider { display: flex; align-items: center; gap: 1rem; margin: 1.25rem 0; color: var(--gray-400); font-size: 0.82rem; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--gray-200); }
+  .social-btn {
+    width: 100%; padding: 0.75rem; border: 2px solid var(--gray-200);
+    border-radius: var(--radius-sm); background: white;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    transition: all 0.2s; color: var(--gray-800);
+  }
+  .social-btn:hover { border-color: var(--blue-bright); background: var(--blue-frost); }
+  .auth-footer { text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: var(--gray-400); }
+  .auth-footer a { color: var(--blue-bright); font-weight: 600; text-decoration: none; }
+
+  /* ─── FEATURES ─── */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .feature-card {
+    background: white; border-radius: var(--radius); padding: 2rem;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200);
+    text-align: center; transition: all 0.3s;
+  }
+  .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--blue-pale); }
+  .feature-icon {
+    width: 60px; height: 60px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--blue-frost), var(--blue-pale));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.7rem; margin: 0 auto 1.25rem;
+  }
+  .feature-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--blue-deep); margin-bottom: 0.5rem; }
+  .feature-card p { font-size: 0.88rem; color: var(--gray-600); line-height: 1.6; }
+
+  /* FOOTER */
+  footer {
+    background: var(--blue-deep); color: rgba(255,255,255,0.8);
+    padding: 3rem 2rem;
+  }
+  .footer-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; margin-bottom: 0.5rem; }
+  .footer-tagline { font-size: 0.88rem; opacity: 0.7; margin-bottom: 1.5rem; }
+  .footer-links { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem; }
+  .footer-copy { font-size: 0.8rem; opacity: 0.5; }
+
+  /* MISC */
+  .password-wrapper { position: relative; }
+  .toggle-pw { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--gray-400); }
+  .alert {
+    padding: 0.85rem 1.25rem; border-radius: var(--radius-sm);
+    font-size: 0.88rem; margin-bottom: 1rem;
+  }
+  .alert-info { background: var(--blue-frost); color: var(--blue-mid); border-left: 4px solid var(--blue-bright); }
+
+  @media (max-width: 768px) {
+    .hero-content { grid-template-columns: 1fr; }
+    .hero-card { display: none; }
+    .dashboard-layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .features-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .time-slots { grid-template-columns: repeat(3,1fr); }
+    .payment-methods { grid-template-columns: 1fr 1fr; }
+    .rx-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showView('home')">
+    <div class="logo-icon">✚</div>
+    Medi<span>Care</span> Pro
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showView('home')">Home</a></li>
+    <li><a href="#" onclick="document.getElementById('doctors-section').scrollIntoView({behavior:'smooth'})">Doctors</a></li>
+    <li><a href="#" onclick="document.getElementById('features-section').scrollIntoView({behavior:'smooth'})">Services</a></li>
+    <li id="nav-dashboard-link" style="display:none"><a href="#" onclick="showView('dashboard')">My Portal</a></li>
+  </ul>
+  <div class="nav-actions" id="nav-auth-buttons">
+    <button class="btn btn-outline" onclick="showView('login')">Login</button>
+    <button class="btn btn-primary" onclick="showView('signup')">Sign Up</button>
+  </div>
+  <div class="nav-actions" id="nav-user-menu" style="display:none">
+    <button class="btn btn-ghost" onclick="showView('dashboard')">👤 My Dashboard</button>
+    <button class="btn btn-outline" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toasts"></div>
+
+<!-- ═══════ VIEW: HOME ═══════ -->
+<div id="view-home" class="view active">
+  <section class="hero">
+    <div class="hero-blob blob1"></div>
+    <div class="hero-blob blob2"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="section-badge" style="background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9)">🏥 Trusted Healthcare Platform</div>
+        <h1>Your Health, Our <em>Priority</em> — Anytime, Anywhere</h1>
+        <p>Book appointments with top-rated doctors, access prescriptions, pay fees online, and manage your complete health records in one secure portal.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <button class="btn btn-primary btn-lg" onclick="showView('signup')">Get Started Free →</button>
+          <button class="btn btn-outline btn-lg" style="background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.5);color:white" onclick="document.getElementById('doctors-section').scrollIntoView({behavior:'smooth'})">Meet Our Doctors</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-num">200+</div><div class="stat-label">Doctors</div></div>
+          <div class="stat"><div class="stat-num">50K+</div><div class="stat-label">Patients</div></div>
+          <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Satisfaction</div></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>Quick Access Portal</h3>
+        <div class="quick-features">
+          <div class="qf-item" onclick="requireLogin('appointment')">
+            <div class="qf-icon">📅</div>
+            <div class="qf-label">Book Appointment</div>
+          </div>
+          <div class="qf-item" onclick="requireLogin('prescription')">
+            <div class="qf-icon">💊</div>
+            <div class="qf-label">Prescriptions</div>
+          </div>
+          <div class="qf-item" onclick="requireLogin('payment')">
+            <div class="qf-icon">💳</div>
+            <div class="qf-label">Pay Fees</div>
+          </div>
+          <div class="qf-item" onclick="requireLogin('reports')">
+            <div class="qf-icon">📁</div>
+            <div class="qf-label">Upload Reports</div>
+          </div>
+        </div>
+        <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.15)">
+          <p style="font-size:0.82rem;opacity:0.7;margin-bottom:0.75rem">Next available slots today:</p>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+            <span style="background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:50px;font-size:0.8rem">10:00 AM</span>
+            <span style="background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:50px;font-size:0.8rem">2:30 PM</span>
+            <span style="background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:50px;font-size:0.8rem">4:00 PM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features-section" style="background:white">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Our Services</div>
+        <h2>Everything You Need in One Place</h2>
+        <p>A complete digital healthcare solution for patients and doctors.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>Smart Appointment Booking</h3>
+          <p>Choose your doctor, pick a date and time slot, and receive instant confirmation — all in under 2 minutes.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💳</div>
+          <h3>Seamless Online Payments</h3>
+          <p>Pay consultation fees securely via credit card, UPI, or net banking. Get digital receipts instantly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💊</div>
+          <h3>Digital Prescriptions</h3>
+          <p>Access your prescriptions anytime, download PDF copies, and share directly with pharmacies.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📁</div>
+          <h3>Report Management</h3>
+          <p>Upload and organize all your medical reports in a secure encrypted vault accessible to your care team.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>Smart Reminders</h3>
+          <p>Never miss an appointment or medication dose with intelligent personalized notifications.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Secure & Private</h3>
+          <p>Your health data is encrypted with bank-grade security and fully HIPAA-compliant storage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Doctors -->
+  <section class="section" id="doctors-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Our Team</div>
+        <h2>Meet Our Specialist Doctors</h2>
+        <p>Board-certified physicians with years of experience in their respective fields.</p>
+      </div>
+      <div class="doctors-grid" id="doctors-grid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">✚ MediCare Pro</div>
+      <div class="footer-tagline">Advanced Healthcare Portal — Your health, our commitment.</div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Help Center</a>
+      </div>
+      <div class="footer-copy">© 2025 MediCare Pro. All rights reserved.</div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ VIEW: LOGIN ═══════ -->
+<div id="view-login" class="view">
+  <div style="padding-top:72px;min-height:100vh;background:linear-gradient(135deg,var(--blue-frost),white);display:flex;align-items:center;justify-content:center;padding:5rem 1rem 2rem">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem">✚</div>
+        <h2>Welcome Back</h2>
+        <p>Sign in to your MediCare Pro account</p>
+      </div>
+      <button class="social-btn" onclick="loginWithGoogle()">
+        <span>🌐</span> Continue with Google
+      </button>
+      <div class="divider">or sign in with email</div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-control" id="login-email" placeholder="patient@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="password-wrapper">
+          <input type="password" class="form-control" id="login-password" placeholder="••••••••">
+          <button class="toggle-pw" onclick="togglePw('login-password')">👁</button>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1.25rem">
+        <a href="#" style="font-size:0.82rem;color:var(--blue-bright)">Forgot password?</a>
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:0.85rem;font-size:1rem" onclick="doLogin()">Sign In →</button>
+      <div class="auth-footer">Don't have an account? <a href="#" onclick="showView('signup')">Sign Up Free</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ VIEW: SIGNUP ═══════ -->
+<div id="view-signup" class="view">
+  <div style="padding-top:72px;min-height:100vh;background:linear-gradient(135deg,var(--blue-frost),white);display:flex;align-items:center;justify-content:center;padding:5rem 1rem 2rem">
+    <div class="auth-card" style="max-width:540px">
+      <div class="auth-logo">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem">✚</div>
+        <h2>Create Your Account</h2>
+        <p>Join MediCare Pro — free for patients</p>
+      </div>
+      <button class="social-btn" onclick="loginWithGoogle()">
+        <span>🌐</span> Continue with Google
+      </button>
+      <div class="divider">or register with email</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input type="text" class="form-control" id="signup-fname" placeholder="Rahul">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="signup-lname" placeholder="Sharma">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-control" id="signup-email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input type="tel" class="form-control" id="signup-phone" placeholder="+91 98765 43210">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date of Birth</label>
+          <input type="date" class="form-control" id="signup-dob">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <select class="form-control" id="signup-gender">
+            <option value="">Select</option>
+            <option>Male</option><option>Female</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="password-wrapper">
+          <input type="password" class="form-control" id="signup-password" placeholder="Min. 8 characters">
+          <button class="toggle-pw" onclick="togglePw('signup-password')">👁</button>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:0.85rem;font-size:1rem;margin-top:0.5rem" onclick="doSignup()">Create Account →</button>
+      <div class="auth-footer">Already have an account? <a href="#" onclick="showView('login')">Sign In</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ VIEW: DASHBOARD ═══════ -->
+<div id="view-dashboard" class="view">
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">👤</div>
+        <div class="sidebar-name" id="sidebar-name">Patient</div>
+        <div class="sidebar-email" id="sidebar-email">patient@mail.com</div>
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="#" class="active" onclick="showDashSection('overview',this)"><span class="nav-icon">🏠</span> Overview</a></li>
+        <li><a href="#" onclick="showDashSection('appointment',this)"><span class="nav-icon">📅</span> Book Appointment</a></li>
+        <li><a href="#" onclick="showDashSection('my-appointments',this)"><span class="nav-icon">📋</span> My Appointments</a></li>
+        <li><a href="#" onclick="showDashSection('payment',this)"><span class="nav-icon">💳</span> Payments</a></li>
+        <li><a href="#" onclick="showDashSection('prescription',this)"><span class="nav-icon">💊</span> Prescriptions</a></li>
+        <li><a href="#" onclick="showDashSection('reports',this)"><span class="nav-icon">📁</span> Upload Reports</a></li>
+        <li><a href="#" onclick="showDashSection('profile',this)"><span class="nav-icon">⚙️</span> My Profile</a></li>
+        <li style="margin-top:2rem"><a href="#" onclick="logout()" style="color:rgba(255,100,100,0.8)"><span class="nav-icon">🚪</span> Logout</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+
+      <!-- Overview -->
+      <div id="dash-overview" class="dash-section active">
+        <div class="dash-header">
+          <h2>Good Morning 👋 <span id="dash-welcome-name">Patient</span></h2>
+          <p>Here's a summary of your healthcare activity.</p>
+        </div>
+        <div class="dash-cards">
+          <div class="dash-card">
+            <div class="dash-card-icon icon-blue">📅</div>
+            <div class="dash-card-value">3</div>
+            <div class="dash-card-label">Upcoming Appointments</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon icon-blue">💊</div>
+            <div class="dash-card-value">5</div>
+            <div class="dash-card-label">Active Prescriptions</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon icon-blue">📁</div>
+            <div class="dash-card-value">12</div>
+            <div class="dash-card-label">Reports Uploaded</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon icon-blue">💳</div>
+            <div class="dash-card-value">₹2,400</div>
+            <div class="dash-card-label">Total Paid</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h3>📅 Upcoming Appointments</h3>
+            <button class="btn btn-ghost" onclick="showDashSection('appointment',null)" style="padding:6px 14px;font-size:0.82rem">+ Book New</button>
+          </div>
+          <div class="panel-body" style="padding:0">
+            <table class="table">
+              <thead><tr><th>Doctor</th><th>Specialty</th><th>Date & Time</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Dr. Anika Sharma</strong></td><td>Cardiologist</td><td>Jan 28, 2025 · 10:00 AM</td><td><span class="badge badge-green">Confirmed</span></td><td><button class="btn btn-ghost" style="padding:4px 12px;font-size:0.78rem">View</button></td></tr>
+                <tr><td><strong>Dr. Rohan Mehta</strong></td><td>Dermatologist</td><td>Feb 3, 2025 · 2:30 PM</td><td><span class="badge badge-orange">Pending</span></td><td><button class="btn btn-ghost" style="padding:4px 12px;font-size:0.78rem">View</button></td></tr>
+                <tr><td><strong>Dr. Priya Nair</strong></td><td>Neurologist</td><td>Feb 10, 2025 · 11:00 AM</td><td><span class="badge badge-blue">Scheduled</span></td><td><button class="btn btn-ghost" style="padding:4px 12px;font-size:0.78rem">View</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h3>💳 Recent Payments</h3></div>
+          <div class="panel-body" style="padding:0">
+            <table class="table">
+              <thead><tr><th>Doctor</th><th>Service</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Dr. Anika Sharma</td><td>Consultation</td><td><strong>₹800</strong></td><td>Jan 15</td><td><span class="badge badge-green">Paid</span></td></tr>
+                <tr><td>Dr. Rohan Mehta</td><td>Follow-up</td><td><strong>₹600</strong></td><td>Jan 10</td><td><span class="badge badge-green">Paid</span></td></tr>
+                <tr><td>Lab Test</td><td>Blood Panel</td><td><strong>₹1,000</strong></td><td>Jan 5</td><td><span class="badge badge-green">Paid</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book Appointment -->
+      <div id="dash-appointment" class="dash-section">
+        <div class="dash-header">
+          <h2>Book an Appointment</h2>
+          <p>Select a doctor, specialty, date, and preferred time slot.</p>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h3>📅 New Appointment</h3></div>
+          <div class="panel-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Select Specialty</label>
+                <select class="form-control" id="appt-specialty" onchange="filterDoctors()">
+                  <option value="">All Specialties</option>
+                  <option>Cardiologist</option>
+                  <option>Dermatologist</option>
+                  <option>Neurologist</option>
+                  <option>Orthopedic</option>
+                  <option>General Physician</option>
+                  <option>Pediatrician</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Select Doctor</label>
+                <select class="form-control" id="appt-doctor">
+                  <option>Dr. Anika Sharma — Cardiologist</option>
+                  <option>Dr. Rohan Mehta — Dermatologist</option>
+                  <option>Dr. Priya Nair — Neurologist</option>
+                  <option>Dr. Vikram Joshi — Orthopedic</option>
+                  <option>Dr. Meera Pillai — General Physician</option>
+                  <option>Dr. Sameer Khan — Pediatrician</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Preferred Date</label>
+                <input type="date" class="form-control" id="appt-date">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Consultation Type</label>
+                <select class="form-control" id="appt-type">
+                  <option>In-Person Visit</option>
+                  <option>Video Consultation</option>
+                  <option>Phone Consultation</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Available Time Slots</label>
+              <div class="time-slots" id="time-slots">
+                <div class="time-slot taken">9:00 AM</div>
+                <div class="time-slot" onclick="selectSlot(this)">9:30 AM</div>
+                <div class="time-slot taken">10:00 AM</div>
+                <div class="time-slot" onclick="selectSlot(this)">10:30 AM</div>
+                <div class="time-slot" onclick="selectSlot(this)">11:00 AM</div>
+                <div class="time-slot taken">11:30 AM</div>
+                <div class="time-slot" onclick="selectSlot(this)">2:00 PM</div>
+                <div class="time-slot" onclick="selectSlot(this)">2:30 PM</div>
+                <div class="time-slot taken">3:00 PM</div>
+                <div class="time-slot" onclick="selectSlot(this)">3:30 PM</div>
+                <div class="time-slot" onclick="selectSlot(this)">4:00 PM</div>
+                <div class="time-slot" onclick="selectSlot(this)">4:30 PM</div>
+              </div>
+              <p class="form-hint">🔴 Grey slots are already booked. Click any available slot to select.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Reason for Visit</label>
+              <textarea class="form-control" rows="3" placeholder="Briefly describe your symptoms or reason for the appointment..."></textarea>
+            </div>
+            <div class="alert alert-info">💡 Consultation fee: ₹800 — Payment can be made after booking confirmation.</div>
+            <div style="display:flex;gap:1rem">
+              <button class="btn btn-primary btn-lg" onclick="bookAppointment()">✅ Confirm Appointment</button>
+              <button class="btn btn-ghost btn-lg" onclick="showDashSection('payment',null)">Pay Now →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Appointments -->
+      <div id="dash-my-appointments" class="dash-section">
+        <div class="dash-header">
+          <h2>My Appointments</h2>
+          <p>View and manage all your scheduled consultations.</p>
+        </div>
+        <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem">
+          <button class="btn btn-primary" onclick="filterAppts('all',this)">All</button>
+          <button class="btn btn-ghost" onclick="filterAppts('upcoming',this)">Upcoming</button>
+          <button class="btn btn-ghost" onclick="filterAppts('completed',this)">Completed</button>
+          <button class="btn btn-ghost" onclick="filterAppts('cancelled',this)">Cancelled</button>
+        </div>
+        <div class="panel">
+          <div class="panel-body" style="padding:0">
+            <table class="table" id="appointments-table">
+              <thead><tr><th>Doctor</th><th>Specialty</th><th>Date & Time</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="appointments-body">
+                <tr><td><strong>Dr. Anika Sharma</strong></td><td>Cardiologist</td><td>Jan 28, 2025 · 10:00 AM</td><td>In-Person</td><td><span class="badge badge-green">Confirmed</span></td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:0.78rem" onclick="openReschedule()">Reschedule</button></td></tr>
+                <tr><td><strong>Dr. Rohan Mehta</strong></td><td>Dermatologist</td><td>Feb 3, 2025 · 2:30 PM</td><td>Video</td><td><span class="badge badge-orange">Pending</span></td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:0.78rem">Cancel</button></td></tr>
+                <tr><td><strong>Dr. Priya Nair</strong></td><td>Neurologist</td><td>Jan 15, 2025 · 11:00 AM</td><td>In-Person</td><td><span class="badge badge-blue">Completed</span></td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:0.78rem" onclick="showDashSection('prescription',null)">View Rx</button></td></tr>
+                <tr><td><strong>Dr. Vikram Joshi</strong></td><td>Orthopedic</td><td>Jan 8, 2025 · 3:00 PM</td><td>In-Person</td><td><span class="badge badge-red">Cancelled</span></td><td><button class="btn btn-ghost" style="padding:4px 10px;font-size:0.78rem" onclick="showDashSection('appointment',null)">Rebook</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div id="dash-payment" class="dash-section">
+        <div class="dash-header">
+          <h2>Pay Consultation Fees</h2>
+          <p>Secure payment processing for your medical consultations.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+          <div class="panel">
+            <div class="panel-header"><h3>💳 Make a Payment</h3></div>
+            <div class="panel-body">
+              <div class="form-group">
+                <label class="form-label">Select Appointment</label>
+                <select class="form-control">
+                  <option>Dr. Anika Sharma — Jan 28, 2025 (₹800)</option>
+                  <option>Dr. Rohan Mehta — Feb 3, 2025 (₹600)</option>
+                </select>
+              </div>
+              <div class="payment-summary">
+                <div class="pay-row"><span>Consultation Fee</span><span>₹800</span></div>
+                <div class="pay-row"><span>Platform Convenience Fee</span><span>₹20</span></div>
+                <div class="pay-row"><span>GST (18%)</span><span>₹147</span></div>
+                <div class="pay-row total"><span>Total Amount</span><span>₹967</span></div>
+              </div>
+              <label class="form-label">Payment Method</label>
+              <div class="payment-methods">
+                <div class="pay-method selected" onclick="selectPayment(this)">
+                  <div class="pay-method-icon">💳</div>
+                  <div class="pay-method-name">Card</div>
+                </div>
+                <div class="pay-method" onclick="selectPayment(this)">
+                  <div class="pay-method-icon">📱</div>
+                  <div class="pay-method-name">UPI</div>
+                </div>
+                <div class="pay-method" onclick="selectPayment(this)">
+                  <div class="pay-method-icon">🏦</div>
+                  <div class="pay-method-name">Net Banking</div>
+                </div>
+              </div>
+              <div id="card-fields">
+                <div class="form-group">
+                  <label class="form-label">Card Number</label>
+                  <input type="text" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Expiry</label>
+                    <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">CVV</label>
+                    <input type="text" class="form-control" placeholder="•••" maxlength="3">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Cardholder Name</label>
+                  <input type="text" class="form-control" placeholder="Rahul Sharma">
+                </div>
+              </div>
+              <button class="btn btn-primary btn-lg" style="width:100%" onclick="processPayment()">🔒 Pay ₹967 Securely</button>
+              <p style="text-align:center;margin-top:0.75rem;font-size:0.78rem;color:var(--gray-400)">🔒 256-bit SSL Encrypted. Your payment is secure.</p>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><h3>📜 Payment History</h3></div>
+            <div class="panel-body" style="padding:0">
+              <table class="table">
+                <thead><tr><th>Receipt</th><th>Doctor</th><th>Amount</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td style="font-family:monospace;font-size:0.78rem">#RX-2025-001</td><td>Dr. A. Sharma</td><td><strong>₹967</strong></td><td><span class="badge badge-green">Paid</span></td></tr>
+                  <tr><td style="font-family:monospace;font-size:0.78rem">#RX-2025-002</td><td>Dr. R. Mehta</td><td><strong>₹726</strong></td><td><span class="badge badge-green">Paid</span></td></tr>
+                  <tr><td style="font-family:monospace;font-size:0.78rem">#RX-2025-003</td><td>Lab Tests</td><td><strong>₹1,200</strong></td><td><span class="badge badge-green">Paid</span></td></tr>
+                  <tr><td style="font-family:monospace;font-size:0.78rem">#RX-2024-048</td><td>Dr. P. Nair</td><td><strong>₹600</strong></td><td><span class="badge badge-green">Paid</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prescriptions -->
+      <div id="dash-prescription" class="dash-section">
+        <div class="dash-header">
+          <h2>My Prescriptions</h2>
+          <p>Access all your digital prescriptions and download copies.</p>
+        </div>
+        <div class="rx-card">
+          <div class="rx-header">
+            <div>
+              <div class="rx-logo">✚ MediCare <span>Pro</span></div>
+              <div class="rx-date">Issued: January 15, 2025</div>
+            </div>
+            <div class="rx-id">#PRX-2025-001</div>
+          </div>
+          <div class="rx-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:1.5rem">
+              <div>
+                <div class="rx-section">
+                  <h4>Patient Information</h4>
+                  <div class="rx-grid">
+                    <div class="rx-field"><strong>Rahul Sharma</strong><span>28 years, Male</span></div>
+                    <div class="rx-field"><strong>BP: 120/80</strong><span>Weight: 72 kg</span></div>
+                  </div>
+                </div>
+                <div class="rx-section">
+                  <h4>Diagnosis</h4>
+                  <p style="font-size:0.9rem;color:var(--gray-800)">Mild Hypertension, Anxiety-induced cardiac symptoms. Patient advised lifestyle modification.</p>
+                </div>
+              </div>
+              <div>
+                <div class="rx-section">
+                  <h4>Attending Physician</h4>
+                  <div class="rx-field" style="margin-bottom:0.4rem"><strong>Dr. Priya Nair</strong><span>MD, Neurology · Reg. No. MH-23456</span></div>
+                  <div class="rx-field"><strong>Apollo Healthcare</strong><span>Mumbai, Maharashtra</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="rx-section">
+              <h4>Prescribed Medications</h4>
+              <div class="rx-med">
+                <div class="rx-med-num">1</div>
+                <div><div class="rx-med-name">Amlodipine 5mg</div><div class="rx-med-dose">1 tablet daily after breakfast · 30 days</div></div>
+              </div>
+              <div class="rx-med">
+                <div class="rx-med-num">2</div>
+                <div><div class="rx-med-name">Metoprolol 25mg</div><div class="rx-med-dose">1 tablet twice daily · 15 days</div></div>
+              </div>
+              <div class="rx-med">
+                <div class="rx-med-num">3</div>
+                <div><div class="rx-med-name">Clonazepam 0.5mg</div><div class="rx-med-dose">1 tablet at bedtime · 10 days</div></div>
+              </div>
+            </div>
+            <div class="rx-section">
+              <h4>Notes & Advice</h4>
+              <p style="font-size:0.88rem;color:var(--gray-600)">Reduce sodium intake. Avoid caffeine. Exercise 30 min daily. Follow up in 2 weeks. Emergency: +91-98765-XXXX</p>
+            </div>
+            <div style="display:flex;gap:0.75rem;margin-top:1rem">
+              <button class="btn btn-primary" onclick="toast('📄 Prescription downloaded as PDF!','success')">⬇ Download PDF</button>
+              <button class="btn btn-ghost" onclick="toast('📤 Prescription shared to your email!','success')">📤 Share via Email</button>
+              <button class="btn btn-ghost" onclick="toast('💊 Sent to pharmacy!','success')">🏥 Send to Pharmacy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rx-card">
+          <div class="rx-header">
+            <div>
+              <div class="rx-logo">✚ MediCare <span>Pro</span></div>
+              <div class="rx-date">Issued: January 10, 2025</div>
+            </div>
+            <div class="rx-id">#PRX-2025-002</div>
+          </div>
+          <div class="rx-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:1.5rem">
+              <div>
+                <div class="rx-section">
+                  <h4>Attending Physician</h4>
+                  <div class="rx-field"><strong>Dr. Rohan Mehta</strong><span>MD, Dermatology · Reg. No. MH-34567</span></div>
+                </div>
+                <div class="rx-section">
+                  <h4>Diagnosis</h4>
+                  <p style="font-size:0.9rem;color:var(--gray-800)">Eczema (Atopic Dermatitis). Moderate severity on forearms and neck.</p>
+                </div>
+              </div>
+            </div>
+            <div class="rx-section">
+              <h4>Prescribed Medications</h4>
+              <div class="rx-med">
+                <div class="rx-med-num">1</div>
+                <div><div class="rx-med-name">Betamethasone Cream 0.1%</div><div class="rx-med-dose">Apply on affected area twice daily · 14 days</div></div>
+              </div>
+              <div class="rx-med">
+                <div class="rx-med-num">2</div>
+                <div><div class="rx-med-name">Cetirizine 10mg</div><div class="rx-med-dose">1 tablet at night · 10 days</div></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:0.75rem;margin-top:1rem">
+              <button class="btn btn-primary" onclick="toast('📄 Prescription downloaded as PDF!','success')">⬇ Download PDF</button>
+              <button class="btn btn-ghost" onclick="toast('📤 Shared!','success')">📤 Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Reports -->
+      <div id="dash-reports" class="dash-section">
+        <div class="dash-header">
+          <h2>Upload Medical Reports</h2>
+          <p>Securely upload and organize your medical reports and test results.</p>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h3>📁 Upload New Report</h3></div>
+          <div class="panel-body">
+            <div class="form-row" style="margin-bottom:1rem">
+              <div class="form-group">
+                <label class="form-label">Report Type</label>
+                <select class="form-control">
+                  <option>Blood Test Report</option>
+                  <option>X-Ray / MRI / CT Scan</option>
+                  <option>ECG Report</option>
+                  <option>Urine Test</option>
+                  <option>Biopsy Report</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Report Date</label>
+                <input type="date" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Share With Doctor (Optional)</label>
+              <select class="form-control">
+                <option value="">Don't share</option>
+                <option>Dr. Anika Sharma — Cardiologist</option>
+                <option>Dr. Rohan Mehta — Dermatologist</option>
+                <option>Dr. Priya Nair — Neurologist</option>
+              </select>
+            </div>
+            <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+              <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="display:none" onchange="handleFileSelect(event)">
+              <div class="upload-icon">☁️</div>
+              <div class="upload-text">
+                <strong>Click to upload</strong> or drag and drop files here
+                <br><span style="font-size:0.82rem;color:var(--gray-400)">PDF, PNG, JPG, DOCX up to 10MB each</span>
+              </div>
+            </div>
+            <div class="uploaded-files" id="uploaded-files"></div>
+            <button class="btn btn-primary btn-lg" style="margin-top:1.25rem" onclick="uploadAllFiles()">⬆ Upload Selected Reports</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h3>📂 Uploaded Reports</h3></div>
+          <div class="panel-body" style="padding:0">
+            <table class="table">
+              <thead><tr><th>Report Name</th><th>Type</th><th>Date</th><th>Shared With</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr><td>🩸 CBC Blood Test.pdf</td><td>Blood Test</td><td>Jan 10, 2025</td><td>Dr. A. Sharma</td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:0.78rem" onclick="toast('📥 Report downloaded!','success')">⬇ Download</button></td></tr>
+                <tr><td>🫀 ECG Report.pdf</td><td>ECG</td><td>Jan 5, 2025</td><td>Dr. P. Nair</td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:0.78rem" onclick="toast('📥 Report downloaded!','success')">⬇ Download</button></td></tr>
+                <tr><td>🦴 Right Knee X-Ray.jpg</td><td>X-Ray</td><td>Dec 22, 2024</td><td>Dr. V. Joshi</td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:0.78rem" onclick="toast('📥 Report downloaded!','success')">⬇ Download</button></td></tr>
+                <tr><td>🧪 Lipid Panel.pdf</td><td>Blood Test</td><td>Dec 15, 2024</td><td>Not shared</td><td><button class="btn btn-ghost" style="padding:3px 10px;font-size:0.78rem" onclick="toast('📥 Report downloaded!','success')">⬇ Download</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div id="dash-profile" class="dash-section">
+        <div class="dash-header">
+          <h2>My Profile</h2>
+          <p>Manage your personal and medical information.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr;gap:1.5rem">
+          <div class="panel">
+            <div class="panel-body" style="text-align:center">
+              <div style="width:100px;height:100px;border-radius:50%;background:var(--blue-frost);display:flex;align-items:center;justify-content:center;font-size:3.5rem;margin:0 auto 1rem;border:4px solid var(--blue-pale)">👤</div>
+              <div style="font-weight:700;font-size:1.1rem;color:var(--blue-deep)" id="profile-name">Rahul Sharma</div>
+              <div style="color:var(--gray-400);font-size:0.85rem;margin-top:4px" id="profile-email">rahul@email.com</div>
+              <div style="margin-top:0.75rem">
+                <span class="badge badge-blue">Verified Patient</span>
+              </div>
+              <button class="btn btn-ghost" style="margin-top:1.5rem;width:100%" onclick="toast('📷 Profile photo feature coming soon!','')">Change Photo</button>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><h3>Personal Information</h3></div>
+            <div class="panel-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-control" value="Rahul" id="pf-fname">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" class="form-control" value="Sharma" id="pf-lname">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" value="rahul@email.com">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone</label>
+                  <input type="tel" class="form-control" value="+91 98765 43210">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Date of Birth</label>
+                  <input type="date" class="form-control" value="1997-03-15">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Blood Group</label>
+                  <select class="form-control">
+                    <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                    <option selected>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Known Allergies</label>
+                <input type="text" class="form-control" placeholder="e.g. Penicillin, Sulfa drugs">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Emergency Contact</label>
+                <input type="text" class="form-control" placeholder="Name · Relationship · Phone">
+              </div>
+              <button class="btn btn-primary" onclick="saveProfile()">💾 Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- APPOINTMENT SUCCESS MODAL -->
+<div class="modal-overlay" id="modal-success">
+  <div class="modal">
+    <div class="modal-body" style="text-align:center;padding:3rem 2rem">
+      <div style="font-size:4rem;margin-bottom:1rem">🎉</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--blue-deep);margin-bottom:0.75rem">Appointment Confirmed!</h3>
+      <p style="color:var(--gray-600);margin-bottom:1.5rem">Your appointment has been successfully booked. You'll receive a confirmation email shortly.</p>
+      <div style="background:var(--blue-frost);border-radius:var(--radius-sm);padding:1.25rem;text-align:left;margin-bottom:2rem">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.88rem"><span style="color:var(--gray-400)">Doctor</span><strong>Dr. Anika Sharma</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.88rem"><span style="color:var(--gray-400)">Date & Time</span><strong>Jan 28, 2025 · 10:00 AM</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.88rem"><span style="color:var(--gray-400)">Booking ID</span><strong style="font-family:monospace">#APT-2025-0042</strong></div>
+      </div>
+      <div style="display:flex;gap:0.75rem;justify-content:center">
+        <button class="btn btn-primary" onclick="closeModal('modal-success');showDashSection('payment',null)">Pay Now ₹967</button>
+        <button class="btn btn-ghost" onclick="closeModal('modal-success')">Pay Later</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT SUCCESS MODAL -->
+<div class="modal-overlay" id="modal-payment-success">
+  <div class="modal">
+    <div class="modal-body" style="text-align:center;padding:3rem 2rem">
+      <div style="font-size:4rem;margin-bottom:1rem">✅</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--success);margin-bottom:0.75rem">Payment Successful!</h3>
+      <p style="color:var(--gray-600);margin-bottom:1.5rem">Your payment of <strong>₹967</strong> has been processed successfully.</p>
+      <div style="background:#DCFCE7;border-radius:var(--radius-sm);padding:1.25rem;margin-bottom:2rem;text-align:left">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.88rem"><span style="color:var(--gray-600)">Transaction ID</span><strong style="font-family:monospace">#TXN-98765432</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.88rem"><span style="color:var(--gray-600)">Amount Paid</span><strong>₹967.00</strong></div>
+      </div>
+      <button class="btn btn-primary" onclick="closeModal('modal-payment-success')">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───
+let currentUser = null;
+let uploadedFiles = [];
+let selectedSlot = null;
+
+// ─── DOCTORS DATA ───
+const doctors = [
+  { name:'Dr. Anika Sharma', spec:'Cardiologist', exp:'15 yrs', rating:'4.9', emoji:'👩‍⚕️', avail:true },
+  { name:'Dr. Rohan Mehta', spec:'Dermatologist', exp:'10 yrs', rating:'4.8', emoji:'👨‍⚕️', avail:true },
+  { name:'Dr. Priya Nair', spec:'Neurologist', exp:'12 yrs', rating:'4.9', emoji:'👩‍⚕️', avail:true },
+  { name:'Dr. Vikram Joshi', spec:'Orthopedic', exp:'18 yrs', rating:'4.7', emoji:'👨‍⚕️', avail:false },
+  { name:'Dr. Meera Pillai', spec:'General Physician', exp:'8 yrs', rating:'4.8', emoji:'👩‍⚕️', avail:true },
+  { name:'Dr. Sameer Khan', spec:'Pediatrician', exp:'11 yrs', rating:'4.9', emoji:'👨‍⚕️', avail:true },
+  { name:'Dr. Lalitha Rao', spec:'Gynecologist', exp:'20 yrs', rating:'5.0', emoji:'👩‍⚕️', avail:true },
+  { name:'Dr. Arjun Singh', spec:'Ophthalmologist', exp:'9 yrs', rating:'4.6', emoji:'👨‍⚕️', avail:false },
+];
+
+function renderDoctors() {
+  const grid = document.getElementById('doctors-grid');
+  grid.innerHTML = doctors.map(d => `
+    <div class="doctor-card">
+      <div class="doctor-avatar">
+        ${d.emoji}
+        ${d.avail ? '<span class="doctor-badge">Available</span>' : '<span class="doctor-badge" style="background:var(--gray-400)">Busy</span>'}
+      </div>
+      <div class="doctor-info">
+        <div class="doctor-name">${d.name}</div>
+        <div class="doctor-spec">${d.spec}</div>
+        <div class="doctor-meta"><span>⏱ ${d.exp} exp</span><span class="doctor-rating">★ ${d.rating}</span></div>
+        <div class="doctor-actions">
+          <button class="btn btn-primary" style="flex:1;padding:0.5rem;font-size:0.82rem" onclick="requireLogin('appointment')">${d.avail ? 'Book Now' : 'Notify Me'}</button>
+          <button class="btn btn-ghost" style="padding:0.5rem 0.75rem;font-size:0.82rem">Profile</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── VIEW NAVIGATION ───
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function requireLogin(section) {
+  if (!currentUser) { showView('login'); toast('🔐 Please login first to access this feature.'); return; }
+  showView('dashboard');
+  setTimeout(() => showDashSection(section, null), 100);
+}
+
+function showDashSection(name, link) {
+  document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('dash-' + name).classList.add('active');
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+  if (link) link.classList.add('active');
+}
+
+// ─── AUTH ───
+function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const pass = document.getElementById('login-password').value;
+  if (!email || !pass) { toast('Please fill in all fields.', 'error'); return; }
+  // Simulate login
+  currentUser = { name: 'Rahul Sharma', email: email };
+  afterLogin();
+}
+
+function doSignup() {
+  const fname = document.getElementById('signup-fname').value;
+  const lname = document.getElementById('signup-lname').value;
+  const email = document.getElementById('signup-email').value;
+  const pass = document.getElementById('signup-password').value;
+  if (!fname || !email || !pass) { toast('Please fill in all required fields.', 'error'); return; }
+  currentUser = { name: fname + ' ' + lname, email: email };
+  toast('🎉 Welcome to MediCare Pro, ' + fname + '!', 'success');
+  afterLogin();
+}
+
+function loginWithGoogle() {
+  currentUser = { name: 'Rahul Sharma', email: 'rahul@gmail.com' };
+  toast('✅ Signed in with Google!', 'success');
+  afterLogin();
+}
+
+function afterLogin() {
+  document.getElementById('nav-auth-buttons').style.display = 'none';
+  document.getElementById('nav-user-menu').style.display = 'flex';
+  document.getElementById('nav-dashboard-link').style.display = 'block';
+  document.getElementById('sidebar-name').textContent = currentUser.name;
+  document.getElementById('sidebar-email').textContent = currentUser.email;
+  document.getElementById('dash-welcome-name').textContent = currentUser.name.split(' ')[0];
+  document.getElementById('profile-name').textContent = currentUser.name;
+  document.getElementById('profile-email').textContent = currentUser.email;
+  showView('dashboard');
+  toast('👋 Welcome back, ' + currentUser.name.split(' ')[0] + '!', 'success');
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('nav-auth-buttons').style.display = 'flex';
+  document.getElementById('nav-user-menu').style.display = 'none';
+  document.getElementById('nav-dashboard-link').style.display = 'none';
+  showView('home');
+  toast('👋 You\'ve been logged out.', '');
+}
+
+// ─── APPOINTMENTS ───
+function selectSlot(el) {
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSlot = el.textContent.trim();
+}
+
+function bookAppointment() {
+  const doc = document.getElementById('appt-doctor').value;
+  const date = document.getElementById('appt-date').value;
+  if (!selectedSlot) { toast('⏰ Please select a time slot.', 'error'); return; }
+  if (!date) { toast('📅 Please select a date.', 'error'); return; }
+  document.getElementById('modal-success').classList.add('open');
+}
+
+// ─── PAYMENT ───
+function selectPayment(el) {
+  document.querySelectorAll('.pay-method').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function processPayment() {
+  const cardInput = document.querySelector('#card-fields input');
+  if (!cardInput.value) { toast('💳 Please enter your card details.', 'error'); return; }
+  // Simulate processing
+  toast('⏳ Processing payment...', '');
+  setTimeout(() => {
+    document.getElementById('modal-payment-success').classList.add('open');
+  }, 1500);
+}
+
+function formatCard(input) {
+  let v = input.value.replace(/\D/g, '').substring(0, 16);
+  input.value = v.replace(/(.{4})/g, '$1 ').trim();
+}
+
+// ─── FILE UPLOAD ───
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.add('drag-over');
+}
+function handleDragLeave(e) {
+  document.getElementById('upload-zone').classList.remove('drag-over');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  addFiles(Array.from(e.dataTransfer.files));
+}
+function handleFileSelect(e) { addFiles(Array.from(e.target.files)); }
+
+function addFiles(files) {
+  files.forEach(file => {
+    if (uploadedFiles.find(f => f.name === file.name)) return;
+    uploadedFiles.push(file);
+    renderFiles();
+  });
+}
+
+function renderFiles() {
+  const container = document.getElementById('uploaded-files');
+  container.innerHTML = uploadedFiles.map((f, i) => {
+    const ext = f.name.split('.').pop().toLowerCase();
+    const icons = { pdf:'📄', jpg:'🖼', jpeg:'🖼', png:'🖼', doc:'📝', docx:'📝' };
+    const icon = icons[ext] || '📁';
+    const size = f.size ? (f.size / 1024 < 1024 ? (f.size/1024).toFixed(1) + ' KB' : (f.size/1024/1024).toFixed(1) + ' MB') : '—';
+    return `
+      <div class="file-item" id="file-${i}">
+        <span class="file-icon">${icon}</span>
+        <div style="flex:1">
+          <div class="file-name">${f.name}</div>
+          <div class="file-size">${size}</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:0%" id="prog-${i}"></div></div>
+        </div>
+        <button class="file-remove" onclick="removeFile(${i})">✕</button>
+      </div>`;
+  }).join('');
+}
+
+function removeFile(i) {
+  uploadedFiles.splice(i, 1);
+  renderFiles();
+}
+
+function uploadAllFiles() {
+  if (!uploadedFiles.length) { toast('⚠ Please select files to upload.', 'error'); return; }
+  uploadedFiles.forEach((f, i) => {
+    let w = 0;
+    const prog = document.getElementById('prog-' + i);
+    const interval = setInterval(() => {
+      w += Math.random() * 15 + 5;
+      if (w >= 100) { w = 100; clearInterval(interval); }
+      if (prog) prog.style.width = w + '%';
+    }, 150);
+  });
+  setTimeout(() => {
+    toast('✅ ' + uploadedFiles.length + ' report(s) uploaded successfully!', 'success');
+    uploadedFiles = [];
+    setTimeout(() => document.getElementById('uploaded-files').innerHTML = '', 2000);
+  }, 2500);
+}
+
+// ─── MODAL ───
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ─── TOAST ───
+function toast(msg, type = '') {
+  const container = document.getElementById('toasts');
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = msg;
+  container.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateX(40px)'; el.style.transition = 'all 0.3s'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+
+// ─── MISC ───
+function togglePw(id) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+function saveProfile() {
+  toast('✅ Profile saved successfully!', 'success');
+}
+
+function openReschedule() {
+  toast('📅 Reschedule feature — select a new slot below.', '');
+  showDashSection('appointment', null);
+}
+
+// ─── SET DEFAULT DATES ───
+const today = new Date().toISOString().split('T')[0];
+const apptDate = document.getElementById('appt-date');
+if (apptDate) apptDate.min = today;
+
+// ─── INIT ───
+renderDoctors();
+</script>
+</body>
+</html>
